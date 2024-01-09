@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Gradient</title>
+    <style>
+        .box {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            filter: blur(50vh);
+        }
+
+        .box>div {
+            position: absolute;
+            height: 40vh;
+            width: 40vw;
+        }
+
+        .box2>div {
+            position: absolute;
+            right: 0;
+            height: 30vh;
+            width: 30vw;
+        }
+
+        @keyframes rolling {
+            0% {
+                transform: rotate(0deg);
+                transform-origin: 0% 0%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+                transform-origin: 0% 0%;
+            }
+        }
+
+        .red {
+            background-color: red;
+            animation: rolling 3s linear 0s infinite;
+        }
+
+        .blue {
+            background-color: blue;
+            animation: rolling 3s linear 1s infinite;
+        }
+
+        .yellow {
+            background-color: yellow;
+            animation: rolling 3s linear 2s infinite;
+        }
+
+        body {
+            background: radial-gradient(transparent, #000 20px);
+            background-size: 4px 4px;
+            overflow: hidden;
+            transition: all 1s;
+            height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        .switch {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 40px;
+            width: 80px;
+            background-image: linear-gradient(to right, #fff, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            border-radius: 50vmin;
+            mix-blend-mode: difference;
+        }
+
+        .switch>div {
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            animation: triger 0.5s ease-in-out 0s forwards;
+            animation-play-state: paused;
+            box-shadow: 0 0 0 1px #000;
+        }
+
+        .reverse-animation {
+            animation-direction: reverse;
+        }
+
+        @keyframes triger {
+            0% {
+                transform: translateX(-50%);
+                background-color: #fff;
+            }
+
+            100% {
+                transform: translateX(50%);
+                background-color: #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="position: absolute;">
+        <div class="box">
+            <div class="red"></div>
+            <div class="blue"></div>
+            <div class="yellow"></div>
+        </div>
+        <div class="box2 box">
+            <div class="red"></div>
+            <div class="blue"></div>
+            <div class="yellow"></div>
+        </div>
+    </div>
+    <div class="switch" style="z-index: 9;">
+        <div> </div>
+    </div>
+    <script>
+        (() => {
+            let f = { value: 1 };
+            f = new Proxy(f, {
+                set: function (target, key, value) {
+                    if (value == 1) {
+                        document.querySelector("body").style.backgroundImage = "radial-gradient(transparent, #000 20px)";
+                        document.querySelector("body").style.backgroundColor = "#fff"
+                    } else {
+                        document.querySelector("body").style.backgroundImage = "radial-gradient(transparent, #fff 20px)";
+                        document.querySelector("body").style.backgroundColor = "#000"
+                    }
+                    console.log(document.querySelector("body").style)
+                    target[key] = value;
+                    return true;
+                }
+            });
+            document.querySelector(".switch>div").addEventListener("click", function () {
+                var switchDiv = document.querySelector(".switch>div");
+                switchDiv.style.animation = 'null'
+                void switchDiv.offsetWidth;
+                switchDiv.style.animation = f.value == 1 ? 'triger 0.5s ease-in-out 0s forwards' : 'triger 0.5s ease-in-out 0s reverse forwards'
+                f.value = f.value == 1 ? 2 : 1;
+                switchDiv.style.animationPlayState = "running";
+            })
+        })()
+    </script>
+</body>
+
+</html>
