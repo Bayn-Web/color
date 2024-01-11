@@ -78,6 +78,7 @@
             border: 1px solid #000;
             border-radius: 50vmin;
             mix-blend-mode: difference;
+            transition: all 1s;
         }
 
         .switch>div {
@@ -105,6 +106,14 @@
             100% {
                 transform: translateX(50%);
                 background-color: #000;
+            }
+        }
+
+        @media screen and (max-width: 1000px) {
+            .switch {
+                top: 0;
+                left: 100%;
+                transform: translate(-100%, 10%);
             }
         }
     </style>
